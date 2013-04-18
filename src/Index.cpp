@@ -4,10 +4,11 @@
 #include <algorithm>
 #include <exception> // TODO: write my own exeption-class
 #include <fstream>
+#include <map>
 
 namespace conc
 {
-	virtual std::vector<std::string> BSBI_Index::make_temp_indexes(const std::vector<std::string>& files)
+	std::vector<std::string> BSBI_Index::make_temp_indexes(const std::vector<std::string>& files)
 	{
 		int file_num = 0, word_num = 0;
 		std::vector<std::string> indexes;
@@ -15,19 +16,20 @@ namespace conc
 		buf.reserve(BUF_SIZE);
 		for(std::vector<std::string>::const_iterator it = files.begin(); it != files.end(); it++)
 		{
-			if( (std::map<std::string, int>::iterator mit = file2num.find(*it)) != file2num.end() )
+			std::map<std::string, int>::iterator mit;
+			if( (mit = file2num.find(*it)) != file2num.end() )
 				continue; 
 			else
 				file2num[*it] = file_num++;
-			std::istream in( *it );
-			if( !in ) throw std::exception("Can't open file\n"); // FIXME: Write my own exeption-class, ask-user what should to do
-			string tok;
+			std::ifstream in( it->c_str() );
+			if( !in ) throw std::exception(); // FIXME: Write my own exeption-class, ask-user what should to do
+			std::string tok;
 			while( in >> tok )
 			{
 				tok = normalize(tok);
 				int cur_file_num = file_num - 1, cur_word_num;
-				if( (std::map<std::string, int>::iterator mit = word2num.find(s)) != word2num.end() )
-					cur_word_num = it->second();
+				if( (mit = word2num.find(tok)) != word2num.end() )
+					cur_word_num = mit->second;
 				else
 				{
 					cur_word_num = word_num++;

@@ -1,5 +1,5 @@
-#ifndef __Index_h__
-#define __Index__h__
+#ifndef __Index_hpp__
+#define __Index_hpp__
 
 #include <string>
 #include <vector>
@@ -10,17 +10,16 @@ namespace conc
 
 class Index
 {
-	std::string path,
-	main, 
-	index, 
-	word2num_filename, 
-	file2num_filename, 
-	word2index_pos_filename;
-	
 	virtual std::vector<std::string> make_temp_indexes(const std::vector<std::string>&) = 0;
 	std::string merge(std::vector<std::string>);
 
 protected:
+	std::string path,
+        main,
+        index,
+        word2num_filename,
+        file2num_filename,
+        word2index_pos_filename;
         std::map<std::string, int> word2num, file2num, word2_idx_pos;
 
 public:
@@ -33,8 +32,8 @@ public:
 		std::string file2num_filename = "file2num", 
 		std::string word2index_pos_filename = "word2index_pos"
 	): path(path), main(path+main), index(path+index), 
-		word2num_filename(path+word2num_filename), file2num(path+file2num_filename), 
-		word2indexpos(path+word2index_pos_filename)
+		word2num_filename(path+word2num_filename), file2num_filename(path+file2num_filename), 
+		word2index_pos_filename(path+word2index_pos_filename)
 	{ }
 		
 	std::string build(std::vector<std::string>);
@@ -53,10 +52,8 @@ public:
 		std::string word2num_filename, 
 		std::string file2num_filename,
 		std::string word2index_pos_filename
-	)
-	{
-		Index(path, main, index, word2num_filename, file2num_filename, word2index_pos_filename);
-	}
+	): Index(path, main, index, word2num_filename, file2num_filename, word2index_pos_filename)
+	{ }
 };
 
 class SPIMI_Index: public Index
@@ -71,10 +68,8 @@ public:
                 std::string word2num_filename, 
                 std::string file2num_filename,
                 std::string word2index_pos_filename
-        )
-        {
-                Index(path, main, index, word2num_filename, file2num_filename, word2index_pos_filename);
-        }
+        ): Index(path, main, index, word2num_filename, file2num_filename, word2index_pos_filename)
+	{ }
 	
 };
 
