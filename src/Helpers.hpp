@@ -21,6 +21,8 @@ bool cmp(const Term&, const Term&);
 std::ostream& operator << (std::ostream&, const Term&);
 std::ostream& operator << (std::ostream&, const std::vector<Term>&);
 std::string save(std::vector<Term>&);
+bool operator < (const Term&, const Term&);
+
 }
 
 #endif
