@@ -10,9 +10,6 @@ namespace conc
 
 class Index
 {
-	virtual std::vector<std::string> make_temp_indexes() = 0;
-	std::string merge(const std::vector<std::string>);
-
 protected:
 	std::string path,
         main,
@@ -37,13 +34,15 @@ public:
 		word2index_pos_filename(path+word2index_pos_filename)
 	{ }
 		
-	std::string build(const std::vector<std::string>&);
+	virtual std::string build(const std::vector<std::string>&) = 0;
 };
 
 class BSBI_Index: public Index
 {
 	static const int BUF_SIZE = 8192;
-	virtual std::vector<std::string> make_temp_indexes();
+	std::vector<std::string> make_temp_indexes();
+	std::string merge(const std::vector<std::string>&);
+	void clear_temp_indexes(const std::vector<std::string>&);
 public:
 	BSBI_Index
 	(
@@ -55,11 +54,11 @@ public:
                 std::string word2index_pos_filename = "word2index_pos"
 	): Index(path, main, index, word2num_filename, file2num_filename, word2index_pos_filename)
 	{ }
+	virtual std::string build(const std::vector<std::string>&);
 };
 
 class SPIMI_Index: public Index
 {
-	virtual std::vector<std::string> make_temp_indexes();
 public:
 	SPIMI_Index
         (
@@ -71,7 +70,7 @@ public:
                 std::string word2index_pos_filename = "word2index_pos"
         ): Index(path, main, index, word2num_filename, file2num_filename, word2index_pos_filename)
 	{ }
-	
+	virtual std::string build(const std::vector<std::string>&);
 };
 
 }

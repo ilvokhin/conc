@@ -4,8 +4,8 @@
 #include <iterator>
 #include <iostream>
 #include <cstdlib>
+#include <utility>
 #include <cctype>
-
 #include <iostream> // TODO
 
 namespace conc
@@ -36,6 +36,17 @@ bool operator < (const Term& lhs, const Term& rhs)
 	if( lhs.word != rhs.word ) return lhs.word < rhs.word;
 	else if ( lhs.file != rhs.file ) return lhs.file < rhs.file;
 	return lhs.pos < rhs.pos;
+}
+
+bool operator < (const std::pair<Term, int>& lhs,const std::pair<Term, int>& rhs)
+{
+	return lhs.first < rhs.first;
+}
+
+std::istream& operator >> (std::istream& is, Term& t)
+{
+	is >> t.word >> t.file >> t.pos;
+	return is;
 }
 
 std::ostream& operator << (std::ostream& os, const Term& t)

@@ -1,24 +1,27 @@
 #include "helpers.hpp"
 #include "index.hpp"
 
+#include <functional>
 #include <algorithm>
 #include <exception> // TODO: write my own exeption-class
 #include <fstream>
 #include <iostream> // TODO
+#include <tr1/memory>
 #include <utility>
+#include <cstdio> // for "remove" function
 #include <queue>
 #include <map>
 
 namespace conc
 {
 
-std::string Index::build(const std::vector<std::string>& source_files)
+std::string BSBI_Index::build(const std::vector<std::string>& source_files)
 {
 	files = source_files;
 	for(std::vector<std::string>::const_iterator it = files.begin(); it != files.end(); it++)
 		std::cout << *it << std::endl;
 	std::vector<std::string> tmp_indexes = make_temp_indexes();
-	return std::string();
+	return merge(tmp_indexes);
 }
 
 std::vector<std::string> BSBI_Index::make_temp_indexes()
@@ -64,11 +67,41 @@ std::vector<std::string> BSBI_Index::make_temp_indexes()
 	return indexes;
 }
 
-std::string Index::merge(const std::vector<std::string> tmp_idx) // TODO: finish
+void BSBI_Index::clear_temp_indexes(const std::vector<std::string>& tmp_idx)
 {
-	std::priority_queue<std::pair<Term, int> > pq(std::greater<Term>);
-	
-	return std::string();
+	for(std::vector<std::string>::const_iterator it = tmp_idx.begin(); it != tmp_idx.end(); it++)
+		if( std::remove( it->c_str() ) ) std::cout << "Can't remove file" << std::endl;
+}
+
+std::string BSBI_Index::merge(const std::vector<std::string>& tmp_idx) // TODO: finish
+{
+	std::priority_queue<std::pair<Term, int>, std::vector<std::pair<Term, int> >, std::greater<std::pair<Term, int> > > pq;
+	std::vector<std::tr1::shared_ptr<std::ifstream> > open_files;
+	for(int i = 0; i < (int) tmp_idx.size(); i++)
+	{
+		open_files.push_back(std::tr1::shared_ptr<std::ifstream>(new std::ifstream(tmp_idx[i].c_str())));
+		Term term;
+		*(open_files.back()) >> term;
+		pq.push( std::make_pair(term, i) ); 
+	}
+	{
+		std::vector<bool> read_all(open_files.size());
+		std::ofstream output(index.c_str());
+		while( !pq.empty() )
+		{
+			output << pq.top().first << std:: endl;
+			int cur_idx = pq.top().second;
+			pq.pop();
+			Term term;
+			read_all[cur_idx] = !(*(open_files[cur_idx]) >> term);
+			if( !read_all[cur_idx] )
+				pq.push( std::make_pair(term, cur_idx) );
+		}
+		for(std::vector<bool>::iterator it = read_all.begin(); it != read_all.end(); it++) // TODO: check
+			if( ! (*it) ) std::cout << "Error: exist not empty files" << std::endl;
+	}
+	clear_temp_indexes(tmp_idx);
+	return index;
 }
 
 }
