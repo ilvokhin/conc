@@ -1,5 +1,5 @@
-#include "helpers.hpp"
-#include "index.hpp"
+#include "helpers.h"
+#include "index.h"
 
 #include <functional>
 #include <algorithm>
@@ -86,10 +86,11 @@ std::string BSBI_Index::merge(const std::vector<std::string>& tmp_idx) // TODO: 
 	}
 	{
 		std::vector<bool> read_all(open_files.size());
-		std::ofstream output(index.c_str());
+		std::ofstream output(index.c_str(), std::ios::binary); //FIXME: add ios::binary
 		while( !pq.empty() )
 		{
-			output << pq.top().first << std:: endl;
+			//output << pq.top().first << std:: endl;
+			output.write(reinterpret_cast<const char*>(&(pq.top().first)), sizeof(Term));
 			int cur_idx = pq.top().second;
 			pq.pop();
 			Term term;
