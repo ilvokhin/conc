@@ -15,9 +15,10 @@
 
 /*
 TODO:
-1. Delete debugs cout's
-2. Write save method (use boost?)
-3. Delete lexicon file in clear method ?
+1. Delete debugs cout's;
+2. Error handling;
+3. Error messages;
+4. SPIMI_Index impl
 */
 
 namespace conc
@@ -141,7 +142,7 @@ void BSBI_Index::bind(void)
 		std::cout << "start move" << std::endl;
 		while( input[0] == word_num && idx.tellg() != end )
 		{
-			idx.read( (char*)input, sizeof(input) );
+			idx.read(reinterpret_cast<char*>(input), sizeof(input) );
 		}
 		std::cout << "next word_num " << input[0] << std::endl;
 		std::cout << "end move" << std::endl;
@@ -156,7 +157,7 @@ void BSBI_Index::save_files(void) // stupidest map save method
 	for(std::map<std::string, int>::iterator it = word2_idx_pos.begin(); it != word2_idx_pos.end(); it++)
 		w2ip << it->first << " " << it->second << " " << std::endl;
 	std::ofstream f( files_filename.c_str() );
-	f << files.size() << std::endl;
+	//f << files.size() << std::endl;
 	std::copy(files.begin(), files.end(), std::ostream_iterator<std::string>(f, "\n"));
 	std::ofstream main_file ( main.c_str() );
 	main_file << index << " " << word2index_pos_filename << " " << files_filename << std::endl;
