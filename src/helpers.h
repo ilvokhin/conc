@@ -1,5 +1,5 @@
-#ifndef __helpers_hpp__
-#define __helpers_hpp__
+#ifndef __helpers_h__
+#define __helpers_h__
 
 #include <iostream> // TODO
 #include <fstream>
