@@ -27,6 +27,7 @@ class BSBI_Search: public Search
 public:
 	BSBI_Search(const std::string&);
 	virtual void find(const std::vector<std::string>&);
+	// d'ctor needed ?
 };
 
 class SPIMI_Search: public Search

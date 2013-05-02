@@ -23,6 +23,7 @@ std::istream& operator >> (std::istream& is, Term& t);
 std::ostream& operator << (std::ostream&, const std::vector<Term>&);
 std::string save(std::vector<Term>&);
 bool operator < (const Term&, const Term&);
+bool operator == (const Term&, const Term&);
 
 }
 

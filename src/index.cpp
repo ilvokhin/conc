@@ -9,6 +9,7 @@
 #include <tr1/memory>
 #include <utility>
 #include <cstdio> // for "remove" function
+#include <cctype>
 #include <queue>
 #include <map>
 #include <iterator>
@@ -57,7 +58,7 @@ std::vector<std::string> BSBI_Index::make_temp_indexes()
 		std::string tok;
 		while( in >> tok )
 		{
-			if( (int) tok.size() == 1 ) continue;
+			if( (int) tok.size() == 1 && !isalpha(tok[0]) ) continue;
 			tok = normalize(tok);
 			int cur_file_num = file_num - 1, cur_word_num;
 			if( (mit = word2num.find(tok)) != word2num.end() )
@@ -137,7 +138,7 @@ void BSBI_Index::bind(void)
 		std::cout << "work with " << word << std::endl;
 		word2_idx_pos[word] = idx.tellg();
 		int input[3];
-		idx.read( (char*)input, sizeof(input) );
+		idx.read(reinterpret_cast<char*>(input), sizeof(input) );
 		int word_num = input[0];
 		std::cout << "start move" << std::endl;
 		while( input[0] == word_num && idx.tellg() != end )

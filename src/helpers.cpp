@@ -38,6 +38,11 @@ bool operator < (const Term& lhs, const Term& rhs)
 	return lhs.pos < rhs.pos;
 }
 
+bool operator == (const Term& lhs, const Term& rhs)
+{
+	return (lhs.word == rhs.word) && (lhs.file == rhs.file) && (lhs.pos == rhs.pos);
+}
+
 bool operator < (const std::pair<Term, int>& lhs,const std::pair<Term, int>& rhs)
 {
 	return lhs.first < rhs.first;
