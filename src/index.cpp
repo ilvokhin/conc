@@ -49,17 +49,19 @@ std::vector<std::string> BSBI_Index::make_temp_indexes()
 	std::map<std::string, int> word2num;
 	for(std::vector<std::string>::const_iterator it = files.begin(); it != files.end(); it++)
 	{
-		std::cout << "before crash" << std::endl;
-		std::cout << "working with file: " << *it << std::endl;
+		std::cout << "work with file " << *it << std::endl;
 		std::map<std::string, int>::iterator mit;
 		file_num++;
 		std::ifstream in( it->c_str() );
 		if( !in ) throw std::exception(); // FIXME: Write my own exeption-class, ask-user what should to do
 		std::string tok;
+		int word_count = 0;
 		while( in >> tok )
 		{
+			word_count++;
 			if( (int) tok.size() == 1 && !isalpha(tok[0]) ) continue;
 			tok = normalize(tok);
+			if( tok.empty() ) continue;
 			int cur_file_num = file_num - 1, cur_word_num;
 			if( (mit = word2num.find(tok)) != word2num.end() )
 			{
@@ -82,6 +84,7 @@ std::vector<std::string> BSBI_Index::make_temp_indexes()
 		std::cout << "out of while" << std::endl;
 		std::cout << "save ramains" << std::endl;
 		if( ! buf.empty() ) indexes.push_back(save(buf));
+		std::cout << "word count: " << word_count << std::endl;
 	}
 	return indexes;
 }
@@ -131,8 +134,6 @@ void BSBI_Index::bind(void)
 	int end = idx.tellg();
 	idx.seekg(0, idx.beg);
 	std::cout << idx.end << " " << end << " " << end / 12 << std::endl;
-	//int n;
-	//std::cin >> n;
 	while( lex >> word )
 	{
 		std::cout << "work with " << word << std::endl;
@@ -141,10 +142,13 @@ void BSBI_Index::bind(void)
 		idx.read(reinterpret_cast<char*>(input), sizeof(input) );
 		int word_num = input[0];
 		std::cout << "start move" << std::endl;
+		int count = 0;
 		while( input[0] == word_num && idx.tellg() != end )
 		{
 			idx.read(reinterpret_cast<char*>(input), sizeof(input) );
+			count++;
 		}
+		std::cout << "Count: " << count << " " << word << std::endl;
 		std::cout << "next word_num " << input[0] << std::endl;
 		std::cout << "end move" << std::endl;
 		idx.seekg(-1*sizeof(input), idx.cur);
