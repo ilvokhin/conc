@@ -25,7 +25,7 @@ TODO:
 namespace conc
 {
 
-const std::string Index::main = "main";
+const std::string BSBI_Index::main = "main";
 
 void BSBI_Index::build(const std::vector<std::string>& source_files)
 {

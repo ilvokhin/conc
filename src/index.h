@@ -8,17 +8,10 @@
 namespace conc
 {
 
-class Index
+class BSBI_Index
 {
-protected:
 	const static std::string main;
-	std::vector<std::string> files;
-public:
-	virtual void build(const std::vector<std::string>&) = 0;
-};
-
-class BSBI_Index: public Index
-{
+        std::vector<std::string> files;
 	std::string path, lexicon, index, word2index_pos_filename, files_filename;
 	std::map<std::string, int> word2_idx_pos;
 	
@@ -40,14 +33,9 @@ public:
 	): path(path), lexicon(path+lexicon), index(path+index), word2index_pos_filename(path + word2index_pos_filename), 
 		files_filename(path+files_filename)
 	{ }
-	virtual void build(const std::vector<std::string>&);
+	void build(const std::vector<std::string>&);
 };
 
-class SPIMI_Index: public Index
-{
-public:
-	virtual void build(const std::vector<std::string>&);
-};
 }
 
 #endif

@@ -30,15 +30,15 @@ BSBI_Search::BSBI_Search(const std::string& main)
 	
 }
 
-void BSBI_Search::find(const std::vector<std::string>& q) // FIXME: this way is to long
+std::vector<std::pair<Term, Term> > BSBI_Search::find(std::vector<std::string>& q) // simplest way can be improved
 { 
-	// TODO: normilize q!
+	std::transform(q.begin(), q.end(), q.begin(), normalize);
 	std::vector<std::vector<Term> > v = collect(q);
+	std::vector<std::pair<Term, Term> > res;
 	std::vector<Term>::iterator it;
 	if( !v.empty() ) it = v[0].begin();
-	else return;
-	std::vector<Term> res;
-	// TODO: write this
+	else return res;
+	std::vector<Term>::iterator f = v[0].end();
 	for( ; it != v[0].end(); it++)
 	{
 		bool found = true;
@@ -46,23 +46,30 @@ void BSBI_Search::find(const std::vector<std::string>& q) // FIXME: this way is 
 		for(int i = 1; i < (int) v.size(); i++)
 		{
 			pos += (q[i].size() + 1);
-			//found = std::binary_search(v[i].begin(), v[i].end(), Term(v[i].begin()->word, it->file, pos));
-			//if( !found ) break;
-			std::vector<Term>::iterator f = std::lower_bound(v[i].begin(), v[i].end(), Term(v[i].begin()->word, it->file, pos));
-			if( f == v[i].end() ) { found = false;  break; }
-			else
-			{
-				//std::cout << *f << std::endl;
-				if( *f == Term(v[i].begin()->word, it->file, pos) ) found == true;
-				else if ( *f == Term(v[i].begin()->word, it->file, pos + 1) ) { pos++; found = true; }
-				else { found = false; break; }
-				//if( !found ) break;
+			f = std::lower_bound(v[i].begin(), v[i].end(), Term(v[i].begin()->word, it->file, pos));
+			if(f == v[i].end() ||
+				(*f != Term(v[i].begin()->word, it->file, pos + 1 ) && *f != Term(v[i].begin()->word, it->file, pos)))
+			{ 
+				found = false;  
+				break; 
 			}
+			else if( *f == Term(v[i].begin()->word, it->file, pos + 1) ) pos++;
 		}
-		if( found ) res.push_back( *it );
+		if( found )
+		{
+			Term begin(it->word, it->file, it->pos - q[0].size());
+			Term end = (f == v[0].end()? Term(it->word, it->file, it->pos + q[0].size()) : *f);
+			res.push_back(std::make_pair(begin, end));
+		}
 	}
+	// TODO: remove
 	std::cout << "Result:" << std::endl;
-	std::copy(res.begin(), res.end(), std::ostream_iterator<Term>(std::cout, "\n"));
+	if( !res.empty() )
+	{
+		for(std::vector<std::pair<Term, Term> >::iterator it = res.begin(); it != res.end(); it++)
+			std::cout << "Begin: " << it->first << "\nEnd: " << it->second << std::endl;
+	}
+	return res;
 }
 
 std::vector<std::vector<Term> > BSBI_Search::collect(const std::vector<std::string>& q)
