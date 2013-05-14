@@ -17,28 +17,30 @@ protected:
 	int offset;
 public:
 	Output(const std::vector<std::string>& files, const int offset = 0): files(files), offset(offset) {}
-	virtual std::string get_result( std::vector<std::pair<Term, Term> >&) = 0;
+	virtual std::string get_result(std::vector<std::pair<Term, Term> >&) = 0;
 };
 
 class OutputWord: public Output
 {
+protected:
+	std::string format(std::vector<std::pair<Term, Term> >&, int (*check)(int));
 public:
 	OutputWord(const std::vector<std::string>& files, const int offset = 0): Output(files, offset) {}
-	virtual std::string get_result( std::vector<std::pair<Term, Term> >&);
+	virtual std::string get_result(std::vector<std::pair<Term, Term> >&);
 };
 
 class OutputSent: public Output
 {
 public:
 	OutputSent(const std::vector<std::string>& files, const int offset = 0): Output(files, offset) {}
-	virtual std::string get_result( std::vector<std::pair<Term, Term> >&);
+	virtual std::string get_result(std::vector<std::pair<Term, Term> >&);
 };
 
-class OutputPar: public Output
+class OutputPar: public OutputWord
 {
 public:
-	OutputPar(const std::vector<std::string>& files, const int offset = 0): Output(files, offset) {}
-	virtual std::string get_result( std::vector<std::pair<Term, Term> >&);
+	OutputPar(const std::vector<std::string>& files, const int offset = 0): OutputWord(files, offset) {}
+	virtual std::string get_result(std::vector<std::pair<Term, Term> >&);
 };
 
 }

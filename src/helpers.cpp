@@ -17,7 +17,7 @@ std::string normalize(std::string& s)
 	std::transform(s.begin(), s.end(), s.begin(), ::tolower);
 	while( ispunct(s[b]) && b < (int) s.size() ) b++;
 	while( ispunct(s[e]) && e > 0 ) e--;
-	if( e < b ) {  std::cout << "Error: " << s << std::endl; return std::string(""); } // FIXME
+	if( e < b ) {  std::cout << "Error: " << s << std::endl; return std::string(); } // FIXME
 	return s.substr(b, e - b + 1);
 }
 
@@ -80,6 +80,11 @@ std::string save(std::vector<Term>& buf)
 	out << buf;
 	buf.clear();
 	return tmp_idx_name;
+}
+
+int isnewline(int ch)
+{
+	return ch == '\n';
 }
 
 }

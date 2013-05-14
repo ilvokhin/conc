@@ -58,10 +58,11 @@ std::vector<std::pair<Term, Term> > BSBI_Search::find(std::vector<std::string>& 
 		if( found )
 		{
 			Term begin(it->word, it->file, it->pos - q[0].size());
-			Term end = (f == v[0].end()? Term(it->word, it->file, it->pos + q[0].size()) : *f);
+			Term end = (f == v[0].end()? Term(it->word, it->file, it->pos) : *f); // + q[0].size()
 			res.push_back(std::make_pair(begin, end));
 		}
 	}
+	/*
 	// TODO: remove
 	std::cout << "Result:" << std::endl;
 	if( !res.empty() )
@@ -69,6 +70,7 @@ std::vector<std::pair<Term, Term> > BSBI_Search::find(std::vector<std::string>& 
 		for(std::vector<std::pair<Term, Term> >::iterator it = res.begin(); it != res.end(); it++)
 			std::cout << "Begin: " << it->first << "\nEnd: " << it->second << std::endl;
 	}
+	*/
 	return res;
 }
 
