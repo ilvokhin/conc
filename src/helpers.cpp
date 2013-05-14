@@ -87,4 +87,9 @@ int isnewline(int ch)
 	return ch == '\n';
 }
 
+int isstop(int ch)
+{
+	return ch == '.' || ch == '!' || ch == '?';
+}
+
 }

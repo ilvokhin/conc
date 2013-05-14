@@ -26,6 +26,6 @@ bool operator < (const Term&, const Term&);
 bool operator == (const Term&, const Term&);
 bool operator != (const Term&, const Term&);
 int isnewline(int);
-
+int isstop(int);
 }
 #endif

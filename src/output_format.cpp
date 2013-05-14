@@ -10,7 +10,7 @@
 
 namespace conc
 {
-	std::string OutputWord::format(std::vector<std::pair<Term, Term> >& pos, int (*check) (int))
+	std::string Output::format(std::vector<std::pair<Term, Term> >& pos, int (*check) (int))
 	{
 		
 		std::stringstream ss;
@@ -41,7 +41,7 @@ namespace conc
 				right.push_back((ch == '\t' || ch == '\n' )? ' ' : ch);
 			}
 			ss << "Result: " << left << q << right << std::endl;
-			if( check == isnewline ) ss << std::endl;
+			if( check == isnewline || check == isstop ) ss << std::endl;
 			
 		}
 		std::cout << ss.str() << std::endl; // TODO: delete
@@ -57,6 +57,6 @@ namespace conc
 	}
 	std::string OutputSent::get_result(std::vector<std::pair<Term, Term> >& pos)
 	{
-		return std::string();
+		return format(pos, isstop);
 	}
 }

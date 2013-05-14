@@ -15,6 +15,7 @@ class Output
 protected:
 	std::vector<std::string> files;
 	int offset;
+	std::string format(std::vector<std::pair<Term, Term> >&, int (*check)(int));
 public:
 	Output(const std::vector<std::string>& files, const int offset = 0): files(files), offset(offset) {}
 	virtual std::string get_result(std::vector<std::pair<Term, Term> >&) = 0;
@@ -22,8 +23,6 @@ public:
 
 class OutputWord: public Output
 {
-protected:
-	std::string format(std::vector<std::pair<Term, Term> >&, int (*check)(int));
 public:
 	OutputWord(const std::vector<std::string>& files, const int offset = 0): Output(files, offset) {}
 	virtual std::string get_result(std::vector<std::pair<Term, Term> >&);
@@ -36,10 +35,10 @@ public:
 	virtual std::string get_result(std::vector<std::pair<Term, Term> >&);
 };
 
-class OutputPar: public OutputWord
+class OutputPar: public Output
 {
 public:
-	OutputPar(const std::vector<std::string>& files, const int offset = 0): OutputWord(files, offset) {}
+	OutputPar(const std::vector<std::string>& files, const int offset = 0): Output(files, offset) {}
 	virtual std::string get_result(std::vector<std::pair<Term, Term> >&);
 };
 
