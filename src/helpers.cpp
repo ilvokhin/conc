@@ -6,7 +6,8 @@
 #include <cstdlib>
 #include <utility>
 #include <cctype>
-#include <iostream> // TODO
+#include <cerrno>
+#include <cstring>
 
 namespace conc
 {
@@ -17,7 +18,7 @@ std::string normalize(std::string& s)
 	std::transform(s.begin(), s.end(), s.begin(), ::tolower);
 	while( ispunct(s[b]) && b < (int) s.size() ) b++;
 	while( ispunct(s[e]) && e > 0 ) e--;
-	if( e < b ) {  std::cout << "Error: " << s << std::endl; return std::string(); } // FIXME
+	if( e < b ) { return std::string(); } // FIXME
 	return s.substr(b, e - b + 1);
 }
 
@@ -27,7 +28,6 @@ std::string get_random_name(int len = 20) // FIXME: random generator
 	std::string s(len, '\0');
 	for(int i = 0; i < len; i++)
 		s[i] = alphas[ std::rand() % alphas.size() ]; //TODO: here
-	std::cout << s << std::endl;
 	return s + "tmp";
 }
 
@@ -73,7 +73,6 @@ std::ostream& operator << (std::ostream& os, const std::vector<Term>& v)
 
 std::string save(std::vector<Term>& buf)
 {
-	std::cout << "save function" << std::endl;
 	std::sort(buf.begin(), buf.end());
 	std::string tmp_idx_name = get_random_name();
 	std::ofstream out(tmp_idx_name.c_str());
@@ -90,6 +89,21 @@ int isnewline(int ch)
 int isstop(int ch)
 {
 	return ch == '.' || ch == '!' || ch == '?';
+}
+
+void err(const std::string& s)
+{
+	std::cerr << "Error: " << s << std::endl;
+}
+
+void err(void)
+{
+	std::cerr << "Error: " << strerror(errno) << std::endl;
+}
+
+void inf(const std::string& s)
+{
+	std::cout << "Information: " << s << std::endl;
 }
 
 }

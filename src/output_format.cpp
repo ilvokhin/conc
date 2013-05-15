@@ -10,10 +10,10 @@
 
 namespace conc
 {
-	std::string Output::format(std::vector<std::pair<Term, Term> >& pos, int (*check) (int))
+	std::vector<std::string> Output::format(std::vector<std::pair<Term, Term> >& pos, int (*check) (int))
 	{
 		
-		std::stringstream ss;
+		std::vector<std::string> out;
 		for(std::vector<std::pair<Term, Term> >::iterator it = pos.begin(); it != pos.end(); it++)
 		{
 			std::ifstream in( files[(it->first).file].c_str(), std::ios::binary );
@@ -29,6 +29,9 @@ namespace conc
 				in.seekg(--pos_left);
 				left.push_back((ch == '\t' || ch == '\n' )? ' ' : ch);
 			}
+			std::string::reverse_iterator rit = left.rbegin();
+			while( (check(*rit) || *rit == ' ') && left.size() ) 
+				rit++, left.resize(left.size() - 1);
 			std::reverse(left.begin(), left.end());
 			in.seekg((it->first).pos);
 			std::string q;
@@ -40,22 +43,22 @@ namespace conc
 				if( check(ch) ) right_off--;
 				right.push_back((ch == '\t' || ch == '\n' )? ' ' : ch);
 			}
-			ss << "Result: " << left << q << right << std::endl;
-			if( check == isnewline || check == isstop ) ss << std::endl;
+			out.push_back("Result: " + left + q + right + "\n");
+			if( check == isnewline ) out.back() += "\n";
 			
 		}
-		std::cout << ss.str() << std::endl; // TODO: delete
-		return ss.str();
+		std::copy(out.begin(), out.end(), std::ostream_iterator<std::string>(std::cout, "\n")); // TODO: delete
+		return out;
 	}
-	std::string OutputWord::get_result(std::vector<std::pair<Term, Term> >& pos)
+	std::vector<std::string> OutputWord::get_result(std::vector<std::pair<Term, Term> >& pos)
 	{
 		return format(pos, isspace);
 	}
-	std::string OutputPar::get_result(std::vector<std::pair<Term, Term> >& pos)
+	std::vector<std::string> OutputPar::get_result(std::vector<std::pair<Term, Term> >& pos)
 	{
 		return format(pos, isnewline);
 	}
-	std::string OutputSent::get_result(std::vector<std::pair<Term, Term> >& pos)
+	std::vector<std::string> OutputSent::get_result(std::vector<std::pair<Term, Term> >& pos)
 	{
 		return format(pos, isstop);
 	}

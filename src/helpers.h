@@ -27,5 +27,8 @@ bool operator == (const Term&, const Term&);
 bool operator != (const Term&, const Term&);
 int isnewline(int);
 int isstop(int);
+void err(const std::string&);
+void err(void);
+void inf(const std::string&);
 }
 #endif
