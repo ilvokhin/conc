@@ -169,7 +169,6 @@ void BSBI_Index::save_files(void) // stupidest map save method
 	std::copy(files.begin(), files.end(), std::ostream_iterator<std::string>(f, "\n"));
 	std::ofstream main_file ( main.c_str() );
 	main_file << index << " " << word2index_pos_filename << " " << files_filename << std::endl;
-	std::cout << main << std::endl;
 }
 
 }

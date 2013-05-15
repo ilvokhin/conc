@@ -20,6 +20,7 @@ class BSBI_Search
 public:
 	BSBI_Search(const std::string&);
 	virtual std::vector<std::pair<Term, Term> > find(std::vector<std::string>&);
+	std::vector<std::string>& get_files();
 };
 
 }

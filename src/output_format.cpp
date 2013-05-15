@@ -45,9 +45,10 @@ namespace conc
 			}
 			out.push_back("Result: " + left + q + right + "\n");
 			if( check == isnewline ) out.back() += "\n";
+			std::cout << out.back() << std::endl;
 			
 		}
-		std::copy(out.begin(), out.end(), std::ostream_iterator<std::string>(std::cout, "\n")); // TODO: delete
+		//std::copy(out.begin(), out.end(), std::ostream_iterator<std::string>(std::cout, "\n")); // TODO: delete
 		return out;
 	}
 	std::vector<std::string> OutputWord::get_result(std::vector<std::pair<Term, Term> >& pos)

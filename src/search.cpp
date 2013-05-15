@@ -94,5 +94,9 @@ std::vector<std::vector<Term> > BSBI_Search::collect(const std::vector<std::stri
 	}
 	return v;
 }
+std::vector<std::string>& BSBI_Search::get_files()
+{
+	return files;
+}
 
 }
