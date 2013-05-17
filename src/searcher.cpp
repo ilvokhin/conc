@@ -6,6 +6,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include <algorithm>
+#include <iterator>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -13,6 +15,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <utility>
+#include <exception>
 #include <tr1/memory>
 
 using namespace std;
@@ -54,6 +57,7 @@ tr1::shared_ptr<Output> choose_output(pair<int, int>& param, vector<string>& fil
 		case 1: return tr1::shared_ptr<Output> ( new OutputSent(files, offset) );
 		case 2: return tr1::shared_ptr<Output> ( new OutputPar(files, offset) );
 	}
+	throw std::exception();
 } 
 
 int main(int argc, char * argv[])
@@ -65,6 +69,7 @@ int main(int argc, char * argv[])
 	BSBI_Search s(param.first + "main");
 	tr1::shared_ptr<Output> out = choose_output(param.second, s.get_files());
 	string str;
+	int count = 0;
 	while( getline(cin, str) )
 	{
 		stringstream ss(str);
@@ -72,7 +77,9 @@ int main(int argc, char * argv[])
 		string word;
 		while( ss >> word ) query.push_back( normalize(word) );
 		vector<pair<Term, Term> > f = s.find(query);
-		cout << "Result:" << endl;
+		cout << "Query " << ++count << " ";
+		copy(query.begin(), query.end(), ostream_iterator<string>(cout, " "));
+		cout << endl;
 		if( f.empty() ) cout << "Not found" << endl;
 		out->get_result( f );
 	}

@@ -34,3 +34,4 @@ int main(int argc, char* argv[])
 	idx.build(files);
 	return 0;
 }
+
