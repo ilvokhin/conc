@@ -17,7 +17,7 @@ namespace conc
 		for(std::vector<std::pair<Term, Term> >::iterator it = pos.begin(); it != pos.end(); it++)
 		{
 			std::ifstream in( files[(it->first).file].c_str(), std::ios::binary );
-			int left_off = offset? offset + 1 : 1, right_off = offset? offset + 1 : 1, 
+			int left_off = offset? offset + 1 : 1, right_off = offset? offset + 1 : 1,
 			pos_left = (it->first).pos, pos_right = (it->second).pos;
 			in.seekg(pos_left? --pos_left : 0);
 			int ch = '\0';
@@ -35,7 +35,7 @@ namespace conc
 			std::reverse(left.begin(), left.end());
 			in.seekg((it->first).pos);
 			std::string q;
-			for(int i = (it->first).pos; i < pos_right && in; i++)
+			for(int i = (it->first).pos; i < pos_right - 1 && in; i++)
 				q.push_back(in.get());
 			std::string right;
 			while( right_off > 0 && ((ch = in.get()) != EOF) )
@@ -43,7 +43,7 @@ namespace conc
 				if( check(ch) ) right_off--;
 				right.push_back((ch == '\t' || ch == '\n' )? ' ' : ch);
 			}
-			out.push_back("Result: " + left + q + right + "\n");
+			out.push_back("Found in file " + files[it->first.file] + ": " + left + q + right + "\n");
 			if( check == isnewline ) out.back() += "\n";
 			std::cout << out.back() << std::endl;
 			
