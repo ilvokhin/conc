@@ -23,7 +23,7 @@ using namespace conc;
 
 void usage(const char* name)
 {
-        printf("USAGE: %s [flags] <index path>\n", name);
+        printf("USAGE: %s [flags: -w | -s | -p NUM] <index path>\n", name);
 }
 
 pair<string, pair<int, int> >  parse(int argc, char* argv[])
@@ -77,7 +77,7 @@ int main(int argc, char * argv[])
 		string word;
 		while( ss >> word ) query.push_back( normalize(word) );
 		vector<pair<Term, Term> > f = s.find(query);
-		cout << "Query " << ++count << " ";
+		cout << "Query " << ++count << ": ";
 		copy(query.begin(), query.end(), ostream_iterator<string>(cout, " "));
 		cout << endl;
 		if( f.empty() ) cout << "Not found" << endl;
