@@ -9,7 +9,7 @@ BUILDER_OBJ_WITH_PB = $(BUILDER_SRC_WITH_PB:.cpp=.o)
 SEARCHER_SRC = $(addprefix src/, searcher.cpp output_format.cpp search.cpp helpers.cpp)
 SEARCHER_OBJ = $(SEARCHER_SRC:.cpp=.o)
 
-all: builder searcher
+#all: builder searcher
 
 pb: builder_pb searcher
 
